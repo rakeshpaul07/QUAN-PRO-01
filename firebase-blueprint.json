@@ -1,0 +1,198 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile for registered students and parents",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 120 },
+        "role": { "type": "string", "enum": ["Student", "Parent", "Admin"] },
+        "email": { "type": "string", "maxLength": 254 },
+        "phone": { "type": "string", "maxLength": 30 },
+        "provider": { "type": "string", "maxLength": 50 },
+        "emailVerified": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["active", "pending"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "name", "role", "email"]
+    },
+    "DemoBooking": {
+      "title": "DemoBooking",
+      "description": "Trial demo class booking request",
+      "type": "object",
+      "properties": {
+        "studentName": { "type": "string", "maxLength": 120 },
+        "parentName": { "type": "string", "maxLength": 120 },
+        "mobileNumber": { "type": "string", "maxLength": 20 },
+        "email": { "type": "string", "maxLength": 254 },
+        "classLevel": { "type": "string", "maxLength": 50 },
+        "subject": { "type": "string", "maxLength": 120 },
+        "preferredDate": { "type": "string", "maxLength": 20 },
+        "preferredTime": { "type": "string", "maxLength": 20 },
+        "address": { "type": "string", "maxLength": 500 },
+        "message": { "type": "string", "maxLength": 1000 },
+        "status": { "type": "string", "enum": ["Pending", "Confirmed", "Completed", "Cancelled"] },
+        "userId": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["studentName", "parentName", "mobileNumber", "email", "classLevel", "subject", "preferredDate", "preferredTime", "address", "status"]
+    },
+    "Payment": {
+      "title": "Payment",
+      "description": "Admission enrollment and UPI transaction reference record",
+      "type": "object",
+      "properties": {
+        "batch": { "type": "string", "maxLength": 50 },
+        "subjects": { "type": "string", "maxLength": 100 },
+        "amount": { "type": "number" },
+        "studentName": { "type": "string", "maxLength": 120 },
+        "className": { "type": "string", "maxLength": 50 },
+        "board": { "type": "string", "maxLength": 50 },
+        "school": { "type": "string", "maxLength": 150 },
+        "studentNumber": { "type": "string", "maxLength": 20 },
+        "parentName": { "type": "string", "maxLength": 120 },
+        "parentNumber": { "type": "string", "maxLength": 20 },
+        "address": { "type": "string", "maxLength": 500 },
+        "email": { "type": "string", "maxLength": 254 },
+        "utr": { "type": "string", "maxLength": 64 },
+        "status": { "type": "string", "enum": ["Under Review", "Approved", "Rejected"] },
+        "userId": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["batch", "subjects", "amount", "studentName", "className", "board", "school", "studentNumber", "parentName", "parentNumber", "address", "email", "utr", "status"]
+    },
+    "Enquiry": {
+      "title": "Enquiry",
+      "description": "Service area inquiry by prospective parents/students",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 120 },
+        "phone": { "type": "string", "maxLength": 20 },
+        "area": { "type": "string", "maxLength": 150 },
+        "details": { "type": "string", "maxLength": 1000 },
+        "status": { "type": "string", "enum": ["Pending", "Resolved"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "phone", "area", "details", "status"]
+    },
+    "AdminUser": {
+      "title": "AdminUser",
+      "description": "Designated administrator identity record",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "maxLength": 254 },
+        "role": { "type": "string", "enum": ["Admin"] }
+      },
+      "required": ["email", "role"]
+    },
+    "Attendance": {
+      "title": "Attendance",
+      "description": "Daily or session-wise student attendance log",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "studentEmail": { "type": "string", "maxLength": 254 },
+        "studentName": { "type": "string", "maxLength": 120 },
+        "date": { "type": "string", "maxLength": 30 },
+        "batch": { "type": "string", "maxLength": 100 },
+        "status": { "type": "string", "enum": ["Present", "Absent", "Late"] },
+        "topic": { "type": "string", "maxLength": 250 },
+        "remarks": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["studentEmail", "studentName", "date", "batch", "status"]
+    },
+    "Performance": {
+      "title": "Performance",
+      "description": "Student test and assessment performance records",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "studentEmail": { "type": "string", "maxLength": 254 },
+        "studentName": { "type": "string", "maxLength": 120 },
+        "testName": { "type": "string", "maxLength": 150 },
+        "subject": { "type": "string", "maxLength": 100 },
+        "marksObtained": { "type": "number" },
+        "maxMarks": { "type": "number" },
+        "grade": { "type": "string", "maxLength": 10 },
+        "testDate": { "type": "string", "maxLength": 30 },
+        "remarks": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["studentEmail", "studentName", "testName", "subject", "marksObtained", "maxMarks", "testDate"]
+    },
+    "StudentBatch": {
+      "title": "StudentBatch",
+      "description": "Batch enrollment for students",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "studentEmail": { "type": "string", "maxLength": 254 },
+        "studentName": { "type": "string", "maxLength": 120 },
+        "batchName": { "type": "string", "maxLength": 100 },
+        "timing": { "type": "string", "maxLength": 100 },
+        "tutor": { "type": "string", "maxLength": 100 },
+        "status": { "type": "string", "enum": ["Active", "Completed", "Paused"] },
+        "startDate": { "type": "string", "maxLength": 30 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["studentEmail", "studentName", "batchName", "status"]
+    },
+    "StudentActivity": {
+      "title": "StudentActivity",
+      "description": "Academic notices, homework, and session activities",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "studentEmail": { "type": "string", "maxLength": 254 },
+        "studentName": { "type": "string", "maxLength": 120 },
+        "title": { "type": "string", "maxLength": 200 },
+        "category": { "type": "string", "maxLength": 50 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "date": { "type": "string", "maxLength": 30 },
+        "status": { "type": "string", "enum": ["Completed", "Assigned", "Pending"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["studentEmail", "studentName", "title", "category", "date"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "User profile collection"
+    },
+    "/demoBookings/{bookingId}": {
+      "schema": { "$ref": "#/entities/DemoBooking" },
+      "description": "Demo class booking requests"
+    },
+    "/payments/{paymentId}": {
+      "schema": { "$ref": "#/entities/Payment" },
+      "description": "Admission and UPI payment references"
+    },
+    "/enquiries/{enquiryId}": {
+      "schema": { "$ref": "#/entities/Enquiry" },
+      "description": "Service area inquiries"
+    },
+    "/adminUsers/{adminId}": {
+      "schema": { "$ref": "#/entities/AdminUser" },
+      "description": "Administrator authorizations"
+    },
+    "/attendance/{attendanceId}": {
+      "schema": { "$ref": "#/entities/Attendance" },
+      "description": "Student attendance logs"
+    },
+    "/performances/{performanceId}": {
+      "schema": { "$ref": "#/entities/Performance" },
+      "description": "Student performance and test score logs"
+    },
+    "/studentBatches/{batchId}": {
+      "schema": { "$ref": "#/entities/StudentBatch" },
+      "description": "Student batch enrollments"
+    },
+    "/studentActivities/{activityId}": {
+      "schema": { "$ref": "#/entities/StudentActivity" },
+      "description": "Student academic activity items"
+    }
+  }
+}

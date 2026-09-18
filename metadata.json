@@ -1,0 +1,6 @@
+{
+  "name": "Quantum Academy",
+  "description": "Premium Home Tuition by Rakesh Paul for Classes 6–12 with Science, Mathematics and Physics programs in Agartala, Tripura.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

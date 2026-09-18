@@ -1,0 +1,98 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'rakeshpaul6009@gmail.com' ||
+        exists(/databases/$(database)/documents/adminUsers/$(request.auth.uid))
+      );
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Users collection
+    match /users/{userId} {
+      allow get: if isValidId(userId) && (isOwner(userId) || isAdmin());
+      allow list: if isAdmin();
+      allow create: if isValidId(userId) && isOwner(userId);
+      allow update: if isValidId(userId) && (isOwner(userId) || isAdmin());
+      allow delete: if isAdmin();
+    }
+
+    // Demo class bookings
+    match /demoBookings/{bookingId} {
+      allow create: if isValidId(bookingId) &&
+        request.resource.data.studentName is string && request.resource.data.studentName.size() <= 120 &&
+        request.resource.data.parentName is string && request.resource.data.parentName.size() <= 120 &&
+        request.resource.data.mobileNumber is string && request.resource.data.mobileNumber.size() <= 20 &&
+        request.resource.data.email is string && request.resource.data.email.size() <= 254;
+      allow get: if isValidId(bookingId) && (isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid));
+      allow list: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+      allow update, delete: if isValidId(bookingId) && isAdmin();
+    }
+
+    // Payments and Admission references
+    match /payments/{paymentId} {
+      allow create: if isValidId(paymentId) &&
+        request.resource.data.studentName is string && request.resource.data.studentName.size() <= 120 &&
+        request.resource.data.utr is string && request.resource.data.utr.size() <= 64;
+      allow get: if isValidId(paymentId) && (isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid));
+      allow list: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+      allow update, delete: if isValidId(paymentId) && isAdmin();
+    }
+
+    // Service Area Enquiries
+    match /enquiries/{enquiryId} {
+      allow create: if isValidId(enquiryId) &&
+        request.resource.data.name is string && request.resource.data.name.size() <= 120 &&
+        request.resource.data.phone is string && request.resource.data.phone.size() <= 20;
+      allow get, list, update, delete: if isAdmin();
+    }
+
+    // Admin user records
+    match /adminUsers/{adminId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // Student Attendance
+    match /attendance/{attendanceId} {
+      allow read: if isValidId(attendanceId) && (isAdmin() || (isSignedIn() && (resource.data.userId == request.auth.uid || resource.data.studentEmail == request.auth.token.email)));
+      allow write: if isValidId(attendanceId) && isAdmin();
+    }
+
+    // Student Performances & Test Scores
+    match /performances/{performanceId} {
+      allow read: if isValidId(performanceId) && (isAdmin() || (isSignedIn() && (resource.data.userId == request.auth.uid || resource.data.studentEmail == request.auth.token.email)));
+      allow write: if isValidId(performanceId) && isAdmin();
+    }
+
+    // Student Batch Enrollments
+    match /studentBatches/{batchId} {
+      allow read: if isValidId(batchId) && (isAdmin() || (isSignedIn() && (resource.data.userId == request.auth.uid || resource.data.studentEmail == request.auth.token.email)));
+      allow write: if isValidId(batchId) && isAdmin();
+    }
+
+    // Student Academic Activities & Notices
+    match /studentActivities/{activityId} {
+      allow read: if isValidId(activityId) && (isAdmin() || (isSignedIn() && (resource.data.userId == request.auth.uid || resource.data.studentEmail == request.auth.token.email)));
+      allow write: if isValidId(activityId) && isAdmin();
+    }
+  }
+}
