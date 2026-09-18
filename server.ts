@@ -1,5 +1,7 @@
 import express from 'express';
 import path from 'path';
+import crypto from 'crypto';
+import Razorpay from 'razorpay';
 import { fileURLToPath } from 'url';
 import { createServer as createViteServer } from 'vite';
 import { db } from './src/db/index.ts';
@@ -19,6 +21,21 @@ import { seedInitialDataIfNeeded } from './src/db/seed.ts';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Razorpay Payment Gateway Configuration
+const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || 'rzp_live_TZdKcaEUmrmOho';
+const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || 'G67NO4zKLfmQtobW3UnT4F1V';
+
+let razorpayClient: Razorpay | null = null;
+function getRazorpay(): Razorpay {
+  if (!razorpayClient) {
+    razorpayClient = new Razorpay({
+      key_id: RAZORPAY_KEY_ID,
+      key_secret: RAZORPAY_KEY_SECRET,
+    });
+  }
+  return razorpayClient;
+}
+
 async function startServer() {
   await seedInitialDataIfNeeded();
   const app = express();
@@ -30,9 +47,8 @@ async function startServer() {
   app.get('/api/health', (req, res) => {
     res.json({
       status: 'ok',
-      database: 'Cloud SQL (PostgreSQL)',
-      region: 'asia-southeast1',
-      firebaseProject: 'fit-depth-153bd',
+      service: 'Quantum Academy Portal',
+      timestamp: new Date().toISOString(),
     });
   });
 
@@ -157,6 +173,125 @@ async function startServer() {
     } catch (error) {
       console.error('Error fetching payments:', error);
       res.status(500).json({ error: 'Failed to fetch payments' });
+    }
+  });
+
+  // ================= RAZORPAY PAYMENT GATEWAY APIS =================
+  // 1. Fetch public Razorpay configuration (Key ID only, secret is never exposed)
+  app.get('/api/razorpay/config', (req, res) => {
+    res.json({
+      success: true,
+      keyId: RAZORPAY_KEY_ID,
+      merchantName: 'Quantum Academy',
+      currency: 'INR',
+    });
+  });
+
+  // 2. Create Razorpay order
+  app.post('/api/razorpay/create-order', async (req, res) => {
+    try {
+      const { amount, receipt, batchName, studentName } = req.body;
+      const numAmount = Number(amount);
+      if (!numAmount || numAmount <= 0) {
+        return res.status(400).json({ success: false, error: 'Valid payment amount is required' });
+      }
+
+      const rzp = getRazorpay();
+      // Razorpay expects amount in the smallest currency sub-unit (paise for INR)
+      const amountInPaise = Math.round(numAmount * 100);
+
+      const order = await rzp.orders.create({
+        amount: amountInPaise,
+        currency: 'INR',
+        receipt: (receipt || `rcpt_${Date.now()}`).slice(0, 40),
+        notes: {
+          batch: String(batchName || 'Tuition Enrollment').slice(0, 50),
+          student: String(studentName || 'Student').slice(0, 50),
+        },
+      });
+
+      res.json({
+        success: true,
+        orderId: order.id,
+        amount: order.amount,
+        currency: order.currency,
+        keyId: RAZORPAY_KEY_ID,
+      });
+    } catch (error: any) {
+      console.error('Error creating Razorpay order:', error);
+      res.status(500).json({
+        success: false,
+        error: error?.message || 'Failed to initialize payment gateway order',
+      });
+    }
+  });
+
+  // 3. Verify Razorpay cryptographic payment signature and record enrollment
+  app.post('/api/razorpay/verify-payment', async (req, res) => {
+    try {
+      const {
+        razorpay_order_id,
+        razorpay_payment_id,
+        razorpay_signature,
+        enrollmentDetails,
+      } = req.body;
+
+      if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+        return res.status(400).json({
+          success: false,
+          error: 'Missing required Razorpay payment verification parameters',
+        });
+      }
+
+      // Verify HMAC SHA256 signature
+      const expectedSignature = crypto
+        .createHmac('sha256', RAZORPAY_KEY_SECRET)
+        .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+        .digest('hex');
+
+      if (expectedSignature !== razorpay_signature) {
+        return res.status(400).json({
+          success: false,
+          error: 'Payment verification failed: Invalid cryptographic signature.',
+        });
+      }
+
+      const details = enrollmentDetails || {};
+      const inserted = await db
+        .insert(payments)
+        .values({
+          batch: details.batch || 'Class 9–10: Science + Mathematics',
+          subjects: details.subjects || 'Science + Mathematics',
+          amount: Number(details.amount) || 4000,
+          studentName: details.studentName || 'Enrolled Student',
+          className: details.className || 'Class 9',
+          board: details.board || 'CBSE',
+          school: details.school || 'School',
+          studentNumber: details.studentNumber || '',
+          parentName: details.parentName || '',
+          parentNumber: details.parentNumber || '',
+          address: details.address || '',
+          email: details.email || '',
+          utr: razorpay_payment_id, // Store Razorpay Payment ID as transaction reference
+          status: 'Approved', // Verified payment!
+          userId: details.userId || null,
+        })
+        .returning();
+
+      res.json({
+        success: true,
+        verified: true,
+        payment: inserted[0],
+        paymentId: razorpay_payment_id,
+        orderId: razorpay_order_id,
+        message: 'Payment verified and enrollment confirmed successfully!',
+      });
+    } catch (error: any) {
+      console.error('Error verifying Razorpay payment:', error);
+      res.status(500).json({
+        success: false,
+        error: error?.message || 'Failed to verify payment',
+      });
     }
   });
 
@@ -380,6 +515,7 @@ async function startServer() {
       const allPerformances = await db.select().from(performances);
       const allBookings = await db.select().from(demoBookings);
       const allPayments = await db.select().from(payments);
+      const allEnquiries = await db.select().from(enquiries);
 
       const students = allUsers.filter((u) => u.role !== 'Admin');
       const presentCount = allAttendance.filter((a) => a.status === 'Present').length;
@@ -394,6 +530,8 @@ async function startServer() {
           tests: allPerformances.length,
           bookings: allBookings.length,
           payments: allPayments.length,
+          enquiries: allEnquiries.length,
+          pendingEnquiries: allEnquiries.filter((e) => (e.status || 'Pending').toLowerCase() === 'pending').length,
         },
         totalStudents: students.length,
         totalBatches: allBatches.length,
@@ -402,6 +540,7 @@ async function startServer() {
         totalTestsRecorded: allPerformances.length,
         demoBookingsCount: allBookings.length,
         pendingPaymentsCount: allPayments.filter((p) => p.status === 'Under Review').length,
+        totalEnquiriesCount: allEnquiries.length,
       });
     } catch (error) {
       console.error('Error fetching admin overview:', error);
@@ -1483,6 +1622,152 @@ async function startServer() {
     }
   });
 
+  // Admin Enquiries: GET, POST, PUT/PATCH, DELETE, Status Update
+  app.get('/api/admin/enquiries', async (req, res) => {
+    try {
+      const results = await db.select().from(enquiries).orderBy(desc(enquiries.createdAt));
+      const formatted = results.map((e) => ({
+        id: e.id,
+        name: e.name,
+        phone: e.phone,
+        area: e.area || 'Agartala',
+        details: e.details || '',
+        status: e.status || 'Pending',
+        createdAt: e.createdAt,
+        created_at: e.createdAt,
+      }));
+
+      const total = formatted.length;
+      const pending = formatted.filter((e) => (e.status || '').toLowerCase() === 'pending').length;
+      const contacted = formatted.filter((e) => (e.status || '').toLowerCase() === 'contacted').length;
+      const resolved = formatted.filter((e) => ['resolved', 'admitted', 'closed'].includes((e.status || '').toLowerCase())).length;
+
+      res.json({
+        success: true,
+        records: formatted,
+        counts: {
+          total,
+          pending,
+          contacted,
+          resolved,
+        },
+      });
+    } catch (error) {
+      console.error('Error fetching admin enquiries:', error);
+      res.status(500).json({ success: false, error: 'Failed to fetch enquiries' });
+    }
+  });
+
+  app.post('/api/admin/enquiries', async (req, res) => {
+    try {
+      const { name, phone, area, details, status } = req.body;
+      if (!name || !phone) {
+        return res.status(400).json({ success: false, error: 'Name and phone are required' });
+      }
+
+      const inserted = await db
+        .insert(enquiries)
+        .values({
+          name: name.trim(),
+          phone: phone.trim(),
+          area: area ? area.trim() : 'Agartala',
+          details: details ? details.trim() : '',
+          status: status || 'Pending',
+        })
+        .returning();
+
+      res.status(201).json({ success: true, enquiry: inserted[0] });
+    } catch (error) {
+      console.error('Error creating enquiry via admin:', error);
+      res.status(500).json({ success: false, error: 'Failed to record enquiry' });
+    }
+  });
+
+  app.patch('/api/admin/enquiries/:id', async (req, res) => {
+    try {
+      const enquiryId = Number(req.params.id);
+      const { status, name, phone, area, details } = req.body;
+
+      const updated = await db
+        .update(enquiries)
+        .set({
+          status: status !== undefined ? status : undefined,
+          name: name !== undefined ? name.trim() : undefined,
+          phone: phone !== undefined ? phone.trim() : undefined,
+          area: area !== undefined ? area.trim() : undefined,
+          details: details !== undefined ? details.trim() : undefined,
+        })
+        .where(eq(enquiries.id, enquiryId))
+        .returning();
+
+      if (updated.length === 0) {
+        return res.status(404).json({ success: false, error: 'Enquiry not found' });
+      }
+
+      res.json({ success: true, enquiry: updated[0] });
+    } catch (error) {
+      console.error('Error updating enquiry:', error);
+      res.status(500).json({ success: false, error: 'Failed to update enquiry' });
+    }
+  });
+
+  app.put('/api/admin/enquiries/:id', async (req, res) => {
+    try {
+      const enquiryId = Number(req.params.id);
+      const { status, name, phone, area, details } = req.body;
+
+      const updated = await db
+        .update(enquiries)
+        .set({
+          status: status !== undefined ? status : undefined,
+          name: name !== undefined ? name.trim() : undefined,
+          phone: phone !== undefined ? phone.trim() : undefined,
+          area: area !== undefined ? area.trim() : undefined,
+          details: details !== undefined ? details.trim() : undefined,
+        })
+        .where(eq(enquiries.id, enquiryId))
+        .returning();
+
+      if (updated.length === 0) {
+        return res.status(404).json({ success: false, error: 'Enquiry not found' });
+      }
+
+      res.json({ success: true, enquiry: updated[0] });
+    } catch (error) {
+      console.error('Error updating enquiry:', error);
+      res.status(500).json({ success: false, error: 'Failed to update enquiry' });
+    }
+  });
+
+  app.delete('/api/admin/enquiries/:id', async (req, res) => {
+    try {
+      const enquiryId = Number(req.params.id);
+      await db.delete(enquiries).where(eq(enquiries.id, enquiryId));
+      res.json({ success: true, message: 'Enquiry deleted successfully' });
+    } catch (error) {
+      console.error('Error deleting enquiry:', error);
+      res.status(500).json({ success: false, error: 'Failed to delete enquiry' });
+    }
+  });
+
+  app.post('/api/admin/update-enquiry-status', async (req, res) => {
+    try {
+      const { id, status } = req.body;
+      if (!id || !status) return res.status(400).json({ success: false, error: 'ID and status required' });
+
+      const updated = await db
+        .update(enquiries)
+        .set({ status })
+        .where(eq(enquiries.id, Number(id)))
+        .returning();
+
+      res.json({ success: true, enquiry: updated[0] });
+    } catch (error) {
+      console.error('Error updating enquiry status:', error);
+      res.status(500).json({ success: false, error: 'Failed to update enquiry status' });
+    }
+  });
+
   // ================= STUDENT PORTAL API =================
   // Fetch a student's full academic dossier (Batch, Attendance, Performances, Activities, Payments)
   app.get('/api/student/portal-data', async (req, res) => {
@@ -1490,8 +1775,25 @@ async function startServer() {
       const emailQuery = (req.query.email ? String(req.query.email) : '').trim().toLowerCase();
       const uidQuery = req.query.uid ? String(req.query.uid).trim() : '';
 
-      // Match student profile
-      const allUsers = await db.select().from(users);
+      // Fetch all tables in parallel via Promise.all for maximum performance and zero delay
+      const [
+        allUsers,
+        allBatches,
+        allAttendance,
+        allPerformances,
+        allActivities,
+        allPayments,
+        allBookings,
+      ] = await Promise.all([
+        db.select().from(users),
+        db.select().from(studentBatches),
+        db.select().from(attendance).orderBy(desc(attendance.date), desc(attendance.createdAt)),
+        db.select().from(performances).orderBy(desc(performances.testDate), desc(performances.createdAt)),
+        db.select().from(studentActivities).orderBy(desc(studentActivities.createdAt)),
+        db.select().from(payments).orderBy(desc(payments.createdAt)),
+        db.select().from(demoBookings).orderBy(desc(demoBookings.createdAt)),
+      ]);
+
       let student = allUsers.find(
         (u) =>
           (emailQuery && (u.email || '').toLowerCase() === emailQuery) ||
@@ -1517,7 +1819,6 @@ async function startServer() {
       const effectiveUid = student ? student.uid : uidQuery;
 
       // 1. Batch data
-      const allBatches = await db.select().from(studentBatches);
       let batch = allBatches.find(
         (b) =>
           (effectiveEmail && (b.studentEmail || '').toLowerCase() === effectiveEmail) ||
@@ -1543,7 +1844,6 @@ async function startServer() {
       }
 
       // 2. Attendance logs
-      const allAttendance = await db.select().from(attendance).orderBy(desc(attendance.date), desc(attendance.createdAt));
       let studentAttendance = allAttendance.filter(
         (a) =>
           (effectiveEmail && (a.studentEmail || '').toLowerCase() === effectiveEmail) ||
@@ -1555,7 +1855,6 @@ async function startServer() {
       const attendancePercentage = totalClasses > 0 ? Math.round((attendedClasses / totalClasses) * 100) : 100;
 
       // 3. Performances / Test scores
-      const allPerformances = await db.select().from(performances).orderBy(desc(performances.testDate), desc(performances.createdAt));
       let studentPerf = allPerformances.filter(
         (p) =>
           (effectiveEmail && (p.studentEmail || '').toLowerCase() === effectiveEmail) ||
@@ -1571,7 +1870,6 @@ async function startServer() {
           : 0;
 
       // 4. Activities, Homework & Notices
-      const allActivities = await db.select().from(studentActivities).orderBy(desc(studentActivities.createdAt));
       let studentActs = allActivities.filter(
         (act) =>
           act.studentEmail === 'all' ||
@@ -1580,14 +1878,12 @@ async function startServer() {
       );
 
       // 5. Payment status & Bookings
-      const allPayments = await db.select().from(payments).orderBy(desc(payments.createdAt));
       const studentPayments = allPayments.filter(
         (p) =>
           (effectiveEmail && (p.email || '').toLowerCase() === effectiveEmail) ||
           (effectiveUid && p.userId === effectiveUid)
       );
 
-      const allBookings = await db.select().from(demoBookings).orderBy(desc(demoBookings.createdAt));
       const studentBookings = allBookings.filter(
         (b) =>
           (effectiveEmail && (b.email || '').toLowerCase() === effectiveEmail) ||

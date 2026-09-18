@@ -22,6 +22,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <style>
       :root {
         --bg: #f8faf7;
@@ -1854,6 +1855,37 @@
         font-weight: 700;
       }
 
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-size: 0.76rem;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      .status-badge.present,
+      .status-badge.approved,
+      .status-badge.resolved {
+        background: rgba(31, 122, 87, 0.12);
+        color: #1b6648;
+      }
+      .status-badge.pending,
+      .status-badge.submitted {
+        background: rgba(217, 119, 6, 0.14);
+        color: #b45309;
+      }
+      .status-badge.contacted {
+        background: rgba(37, 99, 235, 0.14);
+        color: #1d4ed8;
+      }
+      .status-badge.closed,
+      .status-badge.absent {
+        background: rgba(107, 114, 128, 0.14);
+        color: #4b5563;
+      }
+
       .badge-grade {
         display: inline-flex;
         align-items: center;
@@ -2195,7 +2227,7 @@
               <span class="meta-pill"><span class="meta-dot"></span> Classes 6–12</span>
               <span class="meta-pill"><span class="meta-dot"></span> Science &amp; Maths</span>
               <span class="meta-pill"><span class="meta-dot"></span> Personal Guidance</span>
-              <span class="meta-pill"><span class="meta-dot"></span> Firebase &amp; Cloud SQL Enabled</span>
+              <span class="meta-pill"><span class="meta-dot"></span> Agartala, Tripura</span>
             </div>
           </div>
         </div>
@@ -2426,7 +2458,7 @@
                 </div>
 
                 <div class="notice-msg" id="demoNotice">Please fill in all required fields correctly.</div>
-                <div class="success-msg" id="demoSuccess">Your demo class request has been submitted successfully to Firebase and Cloud SQL. We will contact you shortly.</div>
+                <div class="success-msg" id="demoSuccess">Your demo class request has been submitted successfully! We will contact you shortly to schedule your session.</div>
                 <div class="error-msg" id="demoError">Your request could not be submitted. Please try again.</div>
 
                 <div style="margin-top: 18px; display: flex; justify-content: flex-start;">
@@ -2701,15 +2733,15 @@
           </div>
 
           <div>
-            <h3>Payment</h3>
-            <p>UPI: 6009619039@ybl</p>
-            <p>Pay via any UPI app</p>
+            <h3>Secure Payments</h3>
+            <p>Powered by Razorpay</p>
+            <p>UPI, Cards, NetBanking</p>
           </div>
 
           <div>
-            <h3>Database &amp; Cloud</h3>
-            <p>Firebase Firestore: Active</p>
-            <p>Cloud SQL (PostgreSQL): asia-southeast1</p>
+            <h3>Tuition Center</h3>
+            <p>Agartala, Tripura</p>
+            <p>Classes 6–12 • Science &amp; Maths</p>
           </div>
         </div>
 
@@ -2758,25 +2790,23 @@
           </div>
 
           <div class="checkout-payment">
-            <h3>Pay via QR Code / UPI</h3>
-            <p>Scan the QR code with your UPI app or pay directly to the UPI ID below.</p>
-            <div class="qr-payment">
-              <div class="checkout-qr">
-                <img id="checkoutQrImage" src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=upi%3A%2F%2Fpay%3Fpa%3D6009619039%40ybl%26pn%3DQuantum%2520Academy" alt="QR code for Quantum Academy UPI payment" />
-              </div>
-              <div>
-                <span class="label">UPI ID</span>
-                <div class="upi-checkout">
-                  <span>6009619039@ybl</span>
-                  <button class="btn small" type="button" id="checkoutCopyUpi">Copy</button>
-                </div>
-                <p style="font-size: 0.82rem; margin: 12px 0 0;">Save your UTR or transaction reference after payment.</p>
-              </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 6px;">
+              <h3 style="margin: 0;">Online Enrollment Payment</h3>
+              <span class="meta-pill" style="background: rgba(37, 99, 235, 0.08); color: #1d4ed8; border: 1px solid rgba(37, 99, 235, 0.25); font-weight: 700; font-size: 0.78rem;">
+                ⚡ Razorpay Verified
+              </span>
+            </div>
+            <p style="font-size: 0.88rem; color: var(--muted); margin-bottom: 12px;">
+              Complete student details below to open the secure Razorpay payment gateway (supports UPI apps like Google Pay, PhonePe, Paytm, all Debit/Credit Cards &amp; NetBanking).
+            </p>
+
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px;">
+              <span class="meta-pill" style="font-size: 0.72rem; padding: 3px 8px;">🛡️ 256-Bit SSL Encrypted</span>
+              <span class="meta-pill" style="font-size: 0.72rem; padding: 3px 8px;">💳 UPI / Cards / NetBanking</span>
+              <span class="meta-pill" style="font-size: 0.72rem; padding: 3px 8px;">⚡ Instant Confirmation</span>
             </div>
 
-            <div class="checkout-note">Payment is verified by the instructor. Your reference will be stored securely in Firebase &amp; Cloud SQL.</div>
-
-            <form class="checkout-form" id="checkoutForm" style="margin-top: 18px;">
+            <form class="checkout-form" id="checkoutForm">
               <div class="field">
                 <label for="checkoutStudentName">Student Name</label>
                 <input id="checkoutStudentName" type="text" required />
@@ -2822,12 +2852,20 @@
                 <label for="checkoutEmail">Email</label>
                 <input id="checkoutEmail" type="email" required />
               </div>
-              <div class="field">
-                <label for="checkoutUtr">Payment Reference / UTR Number</label>
-                <input id="checkoutUtr" type="text" minlength="6" required placeholder="Enter 12-digit UTR or reference" />
+
+              <!-- Payment Receipt Card shown after successful Razorpay verification -->
+              <div id="checkoutReceiptCard" style="display: none; background: #ecfdf5; border: 1px solid #10b981; border-radius: 8px; padding: 14px; margin: 10px 0;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; color: #047857; font-weight: 800; font-size: 0.95rem;">
+                  <span>✓</span> Payment Successful via Razorpay
+                </div>
+                <div style="font-size: 0.82rem; color: #065f46; line-height: 1.5;" id="checkoutReceiptDetails">
+                </div>
               </div>
-              <button class="btn" type="submit" id="checkoutSubmitButton">Submit for Review</button>
-              <div class="success-msg" id="checkoutSuccess">Payment reference submitted successfully to Firebase and Cloud SQL. Admin review is pending.</div>
+
+              <button class="btn" type="submit" id="checkoutSubmitButton" style="width: 100%; justify-content: center; font-size: 0.98rem; padding: 12px 20px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                <span>🔒 Pay <span id="checkoutBtnPrice">₹4,000</span> via Razorpay</span>
+              </button>
+              <div class="success-msg" id="checkoutSuccess"></div>
               <div class="error-msg" id="checkoutError"></div>
             </form>
           </div>
@@ -3141,13 +3179,16 @@
               </div>
               <div class="account-row">
                 <span class="account-label">Payment Mode</span>
-                <span class="account-value">UPI (6009619039@ybl)</span>
+                <span class="account-value">Razorpay Live (UPI, Cards, NetBanking)</span>
               </div>
               <div class="account-row">
                 <span class="account-label">Admission Status</span>
                 <span class="account-value" style="color: var(--success); font-weight: 800;">✓ Verified Active Admission</span>
               </div>
             </div>
+            <button type="button" class="btn small" id="portalPayFeeBtn" style="margin-top: 14px; width: 100%; justify-content: center; display: flex; align-items: center; gap: 6px;">
+              <span>💳 Pay Monthly Tuition Fee via Razorpay</span>
+            </button>
           </div>
         </div>
 
@@ -3172,12 +3213,12 @@
             </div>
             <div class="account-row">
               <span class="account-label">Authentication Method</span>
-              <span class="account-value" id="accProvider">Firebase Auth</span>
+              <span class="account-value" id="accProvider">Verified Login</span>
             </div>
             <div class="account-row">
-              <span class="account-label">Cloud Synchronization</span>
+              <span class="account-label">Account Status</span>
               <span class="account-value" style="color: var(--success); display: inline-flex; align-items: center; gap: 5px;">
-                <span class="meta-dot"></span> Synced with Firebase &amp; Cloud SQL
+                <span class="meta-dot"></span> Verified &amp; Active
               </span>
             </div>
           </div>
@@ -3204,7 +3245,7 @@
               </h3>
             </div>
             <p style="margin: 4px 0 0; color: var(--muted); font-size: 0.86rem;">
-              Administrator: <strong>Rakesh Paul</strong> (rakeshpaul6009@gmail.com) • Real-Time Database Sync (Cloud SQL + Firestore)
+              Administrator: <strong>Rakesh Paul</strong> (rakeshpaul6009@gmail.com) • Academic Session Active
             </p>
           </div>
           <div style="display: flex; gap: 8px;">
@@ -3220,6 +3261,7 @@
         <!-- Admin Console Navigation Tabs -->
         <div class="portal-tabs" id="adminTabs">
           <button type="button" class="portal-tab active" data-admin-tab="overview">📊 Overview</button>
+          <button type="button" class="portal-tab" data-admin-tab="enquiries">📩 Enquiries <span class="badge-count" id="adminEnquiriesTabBadge" style="display: none; background: #ef4444; color: #fff; font-size: 0.7rem; padding: 2px 6px; border-radius: 999px; margin-left: 4px; font-weight: 700;">0</span></button>
           <button type="button" class="portal-tab" data-admin-tab="students">👨‍🎓 Students &amp; Batches</button>
           <button type="button" class="portal-tab" data-admin-tab="attendance">📅 Mark Attendance</button>
           <button type="button" class="portal-tab" data-admin-tab="performance">🎯 Student Performance</button>
@@ -3234,7 +3276,7 @@
             <div class="stat-compact-card">
               <div class="label">👥 Enrolled Students</div>
               <div class="value" id="adminStatStudents">--</div>
-              <div class="sub">Active learners in database</div>
+              <div class="sub">Active enrolled learners</div>
             </div>
             <div class="stat-compact-card">
               <div class="label">📚 Active Batches</div>
@@ -3261,12 +3303,20 @@
               <div class="value" id="adminStatPayments">--</div>
               <div class="sub">Pending fee verifications</div>
             </div>
+            <div class="stat-compact-card" style="border-left: 3px solid var(--accent);">
+              <div class="label">📩 Service Enquiries</div>
+              <div class="value" id="adminStatEnquiries">--</div>
+              <div class="sub">Home tuition &amp; course queries</div>
+            </div>
           </div>
 
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px;">
             <div class="admin-form-box" style="margin-bottom: 0;">
               <h4>⚡ Quick Academic Actions</h4>
               <div style="display: grid; gap: 10px;">
+                <button type="button" class="btn secondary small" onclick="switchAdminTab('enquiries')" style="text-align: left; justify-content: flex-start; background: rgba(31, 122, 87, 0.08); font-weight: 700;">
+                  📩 View &amp; Manage Enquiries (<span id="adminQuickEnquiryCount">0</span>) →
+                </button>
                 <button type="button" class="btn secondary small" onclick="switchAdminTab('attendance')" style="text-align: left; justify-content: flex-start;">
                   📅 Mark Attendance for Today's Batch →
                 </button>
@@ -3283,16 +3333,16 @@
             </div>
 
             <div class="admin-form-box" style="margin-bottom: 0;">
-              <h4>🔒 Security &amp; Database Architecture</h4>
+              <h4>🔒 Security &amp; Platform Status</h4>
               <div style="font-size: 0.85rem; color: #2c3e35; display: grid; gap: 8px;">
                 <div style="display: flex; justify-content: space-between;">
-                  <span>PostgreSQL Cloud SQL:</span> <strong style="color: var(--success);">Connected (asia-southeast1)</strong>
+                  <span>System Core:</span> <strong style="color: var(--success);">Operational &amp; Secure</strong>
                 </div>
                 <div style="display: flex; justify-content: space-between;">
-                  <span>Firebase Firestore:</span> <strong style="color: var(--success);">Active (Rules enforced)</strong>
+                  <span>Payment Gateway:</span> <strong style="color: var(--success);">Razorpay Live Verified</strong>
                 </div>
                 <div style="display: flex; justify-content: space-between;">
-                  <span>Admin Session:</span> <strong style="color: var(--dark-green);">Full Read/Write Privileges</strong>
+                  <span>Admin Session:</span> <strong style="color: var(--dark-green);">Full Management Privileges</strong>
                 </div>
                 <div style="display: flex; justify-content: space-between;">
                   <span>Student Access Gate:</span> <strong>Restricted to personal dossier</strong>
@@ -3659,6 +3709,119 @@
             </table>
           </div>
         </div>
+
+        <!-- Admin Tab 8: Service Enquiries -->
+        <div class="portal-tab-content" id="adminTabEnquiries">
+          <!-- Summary Metrics Cards -->
+          <div class="stats-grid-compact" style="margin-bottom: 16px;">
+            <div class="stat-compact-card">
+              <div class="label">Total Enquiries</div>
+              <div class="value" id="enqStatTotal">0</div>
+              <div class="sub">All service queries received</div>
+            </div>
+            <div class="stat-compact-card" style="border-left: 3px solid #f59e0b;">
+              <div class="label">Pending Action</div>
+              <div class="value" id="enqStatPending" style="color: #b45309;">0</div>
+              <div class="sub">Awaiting callback or response</div>
+            </div>
+            <div class="stat-compact-card" style="border-left: 3px solid #3b82f6;">
+              <div class="label">Contacted</div>
+              <div class="value" id="enqStatContacted" style="color: #1d4ed8;">0</div>
+              <div class="sub">Discussion in progress</div>
+            </div>
+            <div class="stat-compact-card" style="border-left: 3px solid #10b981;">
+              <div class="label">Resolved / Admitted</div>
+              <div class="value" id="enqStatResolved" style="color: #047857;">0</div>
+              <div class="sub">Successfully enrolled or resolved</div>
+            </div>
+          </div>
+
+          <!-- Add / Log Walk-in or Phone Enquiry Card -->
+          <div class="admin-form-box" style="margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+              <h4 style="margin: 0; display: flex; align-items: center; gap: 6px;">
+                <span>➕</span> Log New / Walk-in Enquiry
+              </h4>
+              <button type="button" class="btn ghost small" id="toggleEnquiryFormBtn" onclick="toggleAdminEnquiryForm()" style="font-size: 0.8rem; padding: 4px 10px;">
+                Hide Form
+              </button>
+            </div>
+            <div id="adminEnquiryFormContainer">
+              <form id="adminNewEnquiryForm" style="display: grid; gap: 12px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px;">
+                  <div class="field">
+                    <label for="adminNewEnqName">Parent / Student Name *</label>
+                    <input id="adminNewEnqName" type="text" placeholder="e.g. Debashish Roy" required style="width: 100%; height: 38px; border: 1px solid var(--line); border-radius: 8px; padding: 0 10px;" />
+                  </div>
+                  <div class="field">
+                    <label for="adminNewEnqPhone">Phone Number *</label>
+                    <input id="adminNewEnqPhone" type="tel" placeholder="e.g. +91 98765 43210" required style="width: 100%; height: 38px; border: 1px solid var(--line); border-radius: 8px; padding: 0 10px;" />
+                  </div>
+                  <div class="field">
+                    <label for="adminNewEnqArea">Area / Locality in Agartala *</label>
+                    <input id="adminNewEnqArea" type="text" placeholder="e.g. Ramnagar / Banamalipur" required style="width: 100%; height: 38px; border: 1px solid var(--line); border-radius: 8px; padding: 0 10px;" />
+                  </div>
+                  <div class="field">
+                    <label for="adminNewEnqStatus">Initial Status</label>
+                    <select id="adminNewEnqStatus" style="width: 100%; height: 38px; border: 1px solid var(--line); border-radius: 8px; padding: 0 10px;">
+                      <option value="Pending">Pending (New)</option>
+                      <option value="Contacted">Contacted (In Progress)</option>
+                      <option value="Resolved">Resolved / Enrolled</option>
+                      <option value="Closed">Closed</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="adminNewEnqDetails">Requirement / Details *</label>
+                  <textarea id="adminNewEnqDetails" rows="2" placeholder="e.g. Class 10 CBSE Board Physics & Math guidance, evening home tuition required in Banamalipur." required style="width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-family: inherit; font-size: 0.88rem;"></textarea>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 8px;">
+                  <button type="button" class="btn ghost small" onclick="document.getElementById('adminNewEnquiryForm').reset()">Clear</button>
+                  <button type="submit" class="btn small" id="adminNewEnqSubmitBtn">Save Enquiry</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Search & Filter Controls -->
+          <div style="display: flex; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+            <div style="display: flex; gap: 10px; flex: 1; max-width: 620px; min-width: 260px;">
+              <input type="text" id="adminEnquirySearchInput" placeholder="🔍 Search enquiries by name, phone, area, or details..." style="flex: 1; height: 38px; border: 1px solid var(--line); border-radius: 8px; padding: 0 12px; font-size: 0.88rem;" />
+              <select id="adminEnquiryStatusFilter" style="height: 38px; border: 1px solid var(--line); border-radius: 8px; padding: 0 10px; font-size: 0.88rem; min-width: 130px;">
+                <option value="ALL">All Statuses</option>
+                <option value="Pending">Pending</option>
+                <option value="Contacted">Contacted</option>
+                <option value="Resolved">Resolved</option>
+                <option value="Closed">Closed</option>
+              </select>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button type="button" class="btn ghost small" onclick="loadAdminEnquiries()" title="Refresh Enquiries">🔄 Refresh</button>
+            </div>
+          </div>
+
+          <!-- Enquiries Table -->
+          <div class="admin-table-wrap">
+            <table class="portal-table">
+              <thead>
+                <tr>
+                  <th>Date &amp; Time</th>
+                  <th>Parent / Student</th>
+                  <th>Phone &amp; Connect</th>
+                  <th>Area / Locality</th>
+                  <th>Requirement Details</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminEnquiriesTableBody">
+                <tr>
+                  <td colspan="7" style="text-align: center; color: var(--muted); padding: 24px;">Loading service enquiries...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -3871,6 +4034,52 @@
           <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 10px;">
             <button type="button" class="btn ghost small" onclick="closeAdminSubmodal('activityEditSubmodal')">Cancel</button>
             <button type="submit" class="btn small" id="activityEditSubmitBtn">Save Notice Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- 6. Edit Enquiry Submodal -->
+    <div class="admin-submodal" id="enquiryEditSubmodal" aria-hidden="true">
+      <div class="admin-submodal-card" role="dialog" aria-modal="true" aria-labelledby="enquiryEditTitle">
+        <div class="admin-submodal-header">
+          <h4 id="enquiryEditTitle">✏️ Edit Service Enquiry &amp; Status</h4>
+          <button type="button" class="admin-submodal-close" onclick="closeAdminSubmodal('enquiryEditSubmodal')" aria-label="Close">×</button>
+        </div>
+        <form id="adminEnquiryEditForm" style="display: grid; gap: 14px;">
+          <input type="hidden" id="editEnqId" />
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div class="field">
+              <label for="editEnqName">Parent / Student Name *</label>
+              <input id="editEnqName" type="text" required style="width: 100%; height: 40px; border: 1px solid var(--line); border-radius: 10px; padding: 0 12px;" />
+            </div>
+            <div class="field">
+              <label for="editEnqPhone">Phone Number *</label>
+              <input id="editEnqPhone" type="tel" required style="width: 100%; height: 40px; border: 1px solid var(--line); border-radius: 10px; padding: 0 12px;" />
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div class="field">
+              <label for="editEnqArea">Area / Locality in Agartala *</label>
+              <input id="editEnqArea" type="text" required style="width: 100%; height: 40px; border: 1px solid var(--line); border-radius: 10px; padding: 0 12px;" />
+            </div>
+            <div class="field">
+              <label for="editEnqStatus">Follow-up Status</label>
+              <select id="editEnqStatus" style="width: 100%; height: 40px; border: 1px solid var(--line); border-radius: 10px; padding: 0 10px;">
+                <option value="Pending">Pending (New)</option>
+                <option value="Contacted">Contacted (In Progress)</option>
+                <option value="Resolved">Resolved / Enrolled</option>
+                <option value="Closed">Closed</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="editEnqDetails">Requirement &amp; Follow-up Details *</label>
+            <textarea id="editEnqDetails" rows="4" style="width: 100%; border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; font-family: inherit; font-size: 0.88rem;" required></textarea>
+          </div>
+          <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 10px;">
+            <button type="button" class="btn ghost small" onclick="closeAdminSubmodal('enquiryEditSubmodal')">Cancel</button>
+            <button type="submit" class="btn small" id="enquiryEditSubmitBtn">Save Changes</button>
           </div>
         </form>
       </div>
@@ -4110,7 +4319,7 @@
           form.reset();
           document.getElementById('demoSuccess').classList.add('show');
           document.getElementById('demoError').classList.remove('show');
-          showToast('Demo class booking saved to Firebase & Cloud SQL!');
+          showToast('Demo class booking submitted successfully!');
         } catch (error) {
           console.error('Submission error:', error);
           document.getElementById('demoError').classList.add('show');
@@ -4601,7 +4810,7 @@
 
             authModal.classList.remove('open');
             authModal.setAttribute('aria-hidden', 'true');
-            showToast('Account created successfully in Firebase & Cloud SQL!');
+            showToast('Account created successfully!');
           } catch (error) {
             console.error('Sign-up error:', error);
             errorBox.textContent = error.message || 'Unable to create account. Please check details and try again.';
@@ -4658,6 +4867,20 @@
         checkoutBatchName.textContent = batch;
         checkoutBatchSubjects.textContent = details.subjects;
         checkoutBatchPrice.innerHTML = `${details.price} <small>/ month</small>`;
+
+        const btnPrice = document.getElementById('checkoutBtnPrice');
+        if (btnPrice) btnPrice.textContent = details.price;
+
+        // Auto-prefill student details if logged in
+        if (currentUser) {
+          const nameInput = document.getElementById('checkoutStudentName');
+          const emailInput = document.getElementById('checkoutEmail');
+          const phoneInput = document.getElementById('checkoutStudentNumber');
+          if (nameInput && !nameInput.value && currentUser.displayName) nameInput.value = currentUser.displayName;
+          if (emailInput && !emailInput.value && currentUser.email) emailInput.value = currentUser.email;
+          if (phoneInput && !phoneInput.value && currentUser.phoneNumber) phoneInput.value = currentUser.phoneNumber;
+        }
+
         checkoutModal.classList.add('open');
         checkoutModal.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
@@ -4679,76 +4902,197 @@
         if (event.target === checkoutModal) closeCheckout();
       });
 
-      document.getElementById('checkoutCopyUpi').addEventListener('click', async () => {
-        try {
-          await navigator.clipboard.writeText('6009619039@ybl');
-          showToast('UPI ID 6009619039@ybl copied!');
-        } catch (error) {
-          showToast('Unable to copy text.');
-        }
-      });
+      const copyUpiBtn = document.getElementById('checkoutCopyUpi');
+      if (copyUpiBtn) {
+        copyUpiBtn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText('6009619039@ybl');
+            showToast('UPI ID 6009619039@ybl copied!');
+          } catch (error) {
+            showToast('Unable to copy text.');
+          }
+        });
+      }
 
-      // Checkout payment submission (Dual sync: Firestore + Cloud SQL)
-      document.getElementById('checkoutForm').addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const form = event.currentTarget;
-        const success = document.getElementById('checkoutSuccess');
-        const errorBox = document.getElementById('checkoutError');
-        const submitButton = document.getElementById('checkoutSubmitButton');
+      // Razorpay Checkout Payment Submission
+      const checkoutFormElem = document.getElementById('checkoutForm');
+      if (checkoutFormElem) {
+        checkoutFormElem.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          const form = event.currentTarget;
+          const success = document.getElementById('checkoutSuccess');
+          const errorBox = document.getElementById('checkoutError');
+          const submitButton = document.getElementById('checkoutSubmitButton');
+          const receiptCard = document.getElementById('checkoutReceiptCard');
+          const receiptDetails = document.getElementById('checkoutReceiptDetails');
 
-        if (!form.checkValidity() || !selectedCheckoutBatch) {
-          form.reportValidity();
-          return;
-        }
-
-        submitButton.disabled = true;
-        errorBox.classList.remove('show');
-
-        const paymentData = {
-          batch: selectedCheckoutBatch.name,
-          subjects: selectedCheckoutBatch.subjects,
-          amount: selectedCheckoutBatch.amount,
-          studentName: document.getElementById('checkoutStudentName').value.trim(),
-          className: document.getElementById('checkoutClass').value,
-          board: document.getElementById('checkoutBoard').value.trim(),
-          school: document.getElementById('checkoutSchool').value.trim(),
-          studentNumber: document.getElementById('checkoutStudentNumber').value.trim(),
-          parentName: document.getElementById('checkoutParentName').value.trim(),
-          parentNumber: document.getElementById('checkoutParentNumber').value.trim(),
-          address: document.getElementById('checkoutAddress').value.trim(),
-          email: document.getElementById('checkoutEmail').value.trim(),
-          utr: document.getElementById('checkoutUtr').value.trim(),
-          status: 'Under Review',
-          userId: auth && auth.currentUser ? auth.currentUser.uid : null,
-        };
-
-        try {
-          // 1. Save to Firestore
-          if (db) {
-            await db.collection('payments').add({
-              ...paymentData,
-              createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
+          if (!form.checkValidity() || !selectedCheckoutBatch) {
+            form.reportValidity();
+            return;
           }
 
-          // 2. Save to Cloud SQL
-          await fetch('/api/payments', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(paymentData)
-          });
+          submitButton.disabled = true;
+          submitButton.innerHTML = '<span>⏳ Opening Razorpay Gateway...</span>';
+          errorBox.classList.remove('show');
+          if (success) success.classList.remove('show');
+          if (receiptCard) receiptCard.style.display = 'none';
 
-          success.classList.add('show');
-          form.reset();
-          showToast('Payment UTR recorded in Firebase & Cloud SQL for verification.');
-        } catch (err) {
-          console.error('Payment submit error:', err);
-          errorBox.textContent = 'Unable to submit payment reference. Please try again.';
-          errorBox.classList.add('show');
-        } finally {
-          submitButton.disabled = false;
-        }
-      });
+          const enrollmentDetails = {
+            batch: selectedCheckoutBatch.name,
+            subjects: selectedCheckoutBatch.subjects,
+            amount: selectedCheckoutBatch.amount,
+            studentName: document.getElementById('checkoutStudentName').value.trim(),
+            className: document.getElementById('checkoutClass').value,
+            board: document.getElementById('checkoutBoard').value.trim(),
+            school: document.getElementById('checkoutSchool').value.trim(),
+            studentNumber: document.getElementById('checkoutStudentNumber').value.trim(),
+            parentName: document.getElementById('checkoutParentName').value.trim(),
+            parentNumber: document.getElementById('checkoutParentNumber').value.trim(),
+            address: document.getElementById('checkoutAddress').value.trim(),
+            email: document.getElementById('checkoutEmail').value.trim(),
+            userId: auth && auth.currentUser ? auth.currentUser.uid : null,
+          };
+
+          try {
+            // 1. Create order on server via Razorpay API
+            const orderRes = await fetch('/api/razorpay/create-order', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                amount: enrollmentDetails.amount,
+                batchName: enrollmentDetails.batch,
+                studentName: enrollmentDetails.studentName,
+              }),
+            });
+            const orderData = await orderRes.json();
+
+            if (!orderData || !orderData.success) {
+              throw new Error(orderData?.error || 'Failed to initialize Razorpay payment order');
+            }
+
+            if (typeof window.Razorpay === 'undefined') {
+              throw new Error('Razorpay payment gateway script is still loading. Please check your internet connection and try again.');
+            }
+
+            // 2. Launch Razorpay Checkout popup
+            const options = {
+              key: orderData.keyId,
+              amount: orderData.amount,
+              currency: orderData.currency || 'INR',
+              name: 'Quantum Academy',
+              description: `${enrollmentDetails.batch} (${enrollmentDetails.subjects})`,
+              order_id: orderData.orderId,
+              prefill: {
+                name: enrollmentDetails.studentName,
+                email: enrollmentDetails.email,
+                contact: enrollmentDetails.studentNumber,
+              },
+              notes: {
+                batch: enrollmentDetails.batch,
+                student: enrollmentDetails.studentName,
+              },
+              theme: {
+                color: '#0b3d2e',
+              },
+              modal: {
+                ondismiss: function () {
+                  submitButton.disabled = false;
+                  submitButton.innerHTML = `<span>🔒 Pay ${selectedCheckoutBatch.price} via Razorpay</span>`;
+                  showToast('Payment window closed. You can retry whenever ready.');
+                },
+              },
+              handler: async function (response) {
+                submitButton.disabled = true;
+                submitButton.innerHTML = '<span>⏳ Verifying Payment with Gateway...</span>';
+
+                try {
+                  // 3. Cryptographic Signature Verification on Server
+                  const verifyRes = await fetch('/api/razorpay/verify-payment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      razorpay_order_id: response.razorpay_order_id,
+                      razorpay_payment_id: response.razorpay_payment_id,
+                      razorpay_signature: response.razorpay_signature,
+                      enrollmentDetails,
+                    }),
+                  });
+                  const verifyData = await verifyRes.json();
+
+                  if (!verifyData || !verifyData.success) {
+                    throw new Error(verifyData?.error || 'Payment signature verification failed.');
+                  }
+
+                  // Dual sync record to Firestore
+                  if (db) {
+                    try {
+                      await db.collection('payments').add({
+                        ...enrollmentDetails,
+                        utr: response.razorpay_payment_id,
+                        orderId: response.razorpay_order_id,
+                        status: 'Approved',
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                      });
+                    } catch (fsErr) {
+                      console.warn('Firestore payment sync:', fsErr);
+                    }
+                  }
+
+                  // 4. Show success receipt
+                  if (receiptCard && receiptDetails) {
+                    receiptDetails.innerHTML = `
+                      <p style="margin: 3px 0;"><strong>Payment ID:</strong> ${response.razorpay_payment_id}</p>
+                      <p style="margin: 3px 0;"><strong>Order ID:</strong> ${response.razorpay_order_id}</p>
+                      <p style="margin: 3px 0;"><strong>Program:</strong> ${enrollmentDetails.batch}</p>
+                      <p style="margin: 3px 0;"><strong>Amount Paid:</strong> ₹${enrollmentDetails.amount.toLocaleString('en-IN')}</p>
+                      <p style="margin: 3px 0;"><strong>Student:</strong> ${enrollmentDetails.studentName}</p>
+                      <p style="margin: 3px 0; color: #047857;"><strong>Status:</strong> Confirmed &amp; Enrolled</p>
+                    `;
+                    receiptCard.style.display = 'block';
+                  }
+
+                  success.textContent = `Payment of ₹${enrollmentDetails.amount.toLocaleString('en-IN')} completed successfully via Razorpay! Enrollment confirmed.`;
+                  success.classList.add('show');
+                  showToast('Payment successful via Razorpay! Enrollment confirmed.');
+
+                  form.reset();
+                  submitButton.disabled = false;
+                  submitButton.innerHTML = '<span>✓ Enrollment Confirmed via Razorpay</span>';
+                  submitButton.style.background = 'var(--success)';
+                  submitButton.style.borderColor = 'var(--success)';
+
+                  // If user is currently logged in, refresh their portal data
+                  if (currentUser) {
+                    loadStudentPortalData(currentUser.email, currentUser.uid);
+                  }
+                } catch (verifyErr) {
+                  console.error('Payment verification error:', verifyErr);
+                  errorBox.textContent = verifyErr.message || 'Payment completed, but verification failed. Payment ID: ' + response.razorpay_payment_id;
+                  errorBox.classList.add('show');
+                  submitButton.disabled = false;
+                  submitButton.innerHTML = `<span>🔒 Pay ${selectedCheckoutBatch.price} via Razorpay</span>`;
+                }
+              },
+            };
+
+            const rzp = new window.Razorpay(options);
+            rzp.on('payment.failed', function (response) {
+              console.error('Razorpay payment failed:', response.error);
+              errorBox.textContent = `Payment Failed: ${response.error.description || 'Declined by bank.'}`;
+              errorBox.classList.add('show');
+              submitButton.disabled = false;
+              submitButton.innerHTML = `<span>🔒 Pay ${selectedCheckoutBatch.price} via Razorpay</span>`;
+            });
+            rzp.open();
+          } catch (err) {
+            console.error('Payment initiation error:', err);
+            errorBox.textContent = err.message || 'Unable to connect to Razorpay. Please try again.';
+            errorBox.classList.add('show');
+            submitButton.disabled = false;
+            submitButton.innerHTML = `<span>🔒 Pay ${selectedCheckoutBatch.price} via Razorpay</span>`;
+          }
+        });
+      }
 
       document.querySelectorAll('[data-demo-batch]').forEach((button) => {
         button.addEventListener('click', () => {
@@ -4800,7 +5144,7 @@
             body: JSON.stringify(enquiryData)
           });
 
-          showToast('Your enquiry has been received in Firebase & Cloud SQL!');
+          showToast('Your enquiry has been received! We will contact you soon.');
           form.reset();
         } catch (err) {
           showToast('Unable to send enquiry. Please try again.');
@@ -4884,143 +5228,161 @@
         });
       });
 
-      // Load live student dossier data from /api/student/portal-data
+      // Render student portal dossier into DOM
+      function renderStudentPortalDossier(data) {
+        if (!data) return;
+
+        // 1. Batch details
+        if (data.batch) {
+          const bTitle = document.getElementById('studentBatchTitle');
+          const bBadge = document.getElementById('studentBatchBadge');
+          const bTiming = document.getElementById('studentBatchTiming');
+          const bTutor = document.getElementById('studentBatchTutor');
+          const bStatus = document.getElementById('studentBatchStatus');
+          const feeBatch = document.getElementById('studentFeeBatch');
+
+          if (bTitle) bTitle.textContent = data.batch.batch_name;
+          if (bBadge) bBadge.textContent = data.batch.batch_name;
+          if (bTiming) bTiming.textContent = data.batch.timing || 'Mon, Wed, Fri • 4:00 PM – 5:30 PM';
+          if (bTutor) bTutor.textContent = data.batch.tutor_name || 'Rakesh Paul (M.Sc Physics)';
+          if (bStatus) bStatus.textContent = (data.batch.status || 'Active').toUpperCase();
+          if (feeBatch) feeBatch.textContent = data.batch.batch_name;
+        }
+
+        // 2. Attendance
+        const attPct = data.attendanceRate || 0;
+        const ring = document.getElementById('studentAttRing');
+        const attPctElem = document.getElementById('studentAttPct');
+        const attTotalElem = document.getElementById('studentAttTotal');
+        const attPresentElem = document.getElementById('studentAttPresent');
+        const attAbsentElem = document.getElementById('studentAttAbsent');
+        const attTbody = document.getElementById('studentAttendanceTableBody');
+
+        if (attPctElem) attPctElem.textContent = `${attPct}%`;
+        if (ring) {
+          ring.style.background = `conic-gradient(var(--success) ${attPct}%, var(--line) 0)`;
+        }
+        if (attTotalElem) attTotalElem.textContent = data.totalClasses || 0;
+        if (attPresentElem) attPresentElem.textContent = data.presentCount || 0;
+        if (attAbsentElem) attAbsentElem.textContent = data.absentCount || 0;
+
+        if (attTbody && data.attendance) {
+          if (data.attendance.length === 0) {
+            attTbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--muted); padding: 24px;">No class attendance recorded yet.</td></tr>';
+          } else {
+            attTbody.innerHTML = data.attendance.map((att) => {
+              const dateStr = att.date ? new Date(att.date).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' }) : '-';
+              const statusClass = (att.status || 'Present').toLowerCase();
+              return `
+                <tr>
+                  <td><strong>${dateStr}</strong></td>
+                  <td>${att.batch_name || 'Science & Math'}</td>
+                  <td><span class="status-badge ${statusClass}">${att.status || 'Present'}</span></td>
+                  <td>${att.topic_covered || 'Core concepts'}</td>
+                  <td style="color: var(--muted); font-size: 0.82rem;">${att.remarks || 'Regular classwork completed'}</td>
+                </tr>
+              `;
+            }).join('');
+          }
+        }
+
+        // 3. Performance / Test Marks
+        const avgScoreElem = document.getElementById('studentAvgScore');
+        const highScoreElem = document.getElementById('studentHighScore');
+        const testCountElem = document.getElementById('studentTestCount');
+        const perfGrid = document.getElementById('studentPerformanceGrid');
+
+        if (avgScoreElem) avgScoreElem.textContent = `${data.avgScore || 0}%`;
+        if (highScoreElem) highScoreElem.textContent = `${data.highestScore || 0}%`;
+        if (testCountElem) testCountElem.textContent = `${(data.performances && data.performances.length) || 0} Tests`;
+
+        if (perfGrid && data.performances) {
+          if (data.performances.length === 0) {
+            perfGrid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 28px; color: var(--muted);">No assessment records yet. Tests conducted will appear here.</div>';
+          } else {
+            perfGrid.innerHTML = data.performances.map((perf) => {
+              const pct = perf.percentage || (perf.max_marks ? Math.round((perf.marks_obtained / perf.max_marks) * 100) : 0);
+              const testDate = perf.date ? new Date(perf.date).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' }) : '';
+              return `
+                <div class="performance-card">
+                  <div class="perf-head">
+                    <div>
+                      <h4 style="margin: 0; font-size: 0.98rem; color: var(--dark-green);">${perf.test_name}</h4>
+                      <span style="font-size: 0.78rem; color: var(--muted);">${perf.subject} • ${testDate}</span>
+                    </div>
+                    <span class="badge-grade">${perf.grade || 'A'}</span>
+                  </div>
+                  <div class="perf-score-row">
+                    <span class="score">${perf.marks_obtained} <span style="font-size: 0.85rem; color: var(--muted); font-weight: normal;">/ ${perf.max_marks}</span></span>
+                    <span class="pct">${pct}%</span>
+                  </div>
+                  <div class="perf-bar-wrap">
+                    <div class="perf-bar-fill" style="width: ${Math.min(100, pct)}%;"></div>
+                  </div>
+                  <p class="perf-feedback">"${perf.remarks || 'Strong performance. Keep practicing numerical questions.'}"</p>
+                </div>
+              `;
+            }).join('');
+          }
+        }
+
+        // 4. Activities & Homework
+        const actList = document.getElementById('studentActivitiesList');
+        if (actList && data.activities) {
+          if (data.activities.length === 0) {
+            actList.innerHTML = '<div style="text-align: center; padding: 24px; color: var(--muted);">No active tasks or homework right now.</div>';
+          } else {
+            actList.innerHTML = data.activities.map((act) => {
+              const dueDate = act.due_date ? `Due: ${new Date(act.due_date).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' })}` : '';
+              return `
+                <div class="activity-item">
+                  <div class="act-type ${act.type}">${(act.type || 'TASK').toUpperCase()}</div>
+                  <div class="act-content">
+                    <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 6px;">
+                      <h4 style="margin: 0; color: var(--dark-green); font-size: 0.95rem;">${act.title}</h4>
+                      <span class="act-date">${dueDate}</span>
+                    </div>
+                    <p style="margin: 4px 0 0; font-size: 0.84rem; color: var(--text); line-height: 1.4;">${act.description || ''}</p>
+                  </div>
+                </div>
+              `;
+            }).join('');
+          }
+        }
+      }
+
+      // Load live student dossier data from /api/student/portal-data (with caching for 0ms load)
       async function loadStudentPortalData(email, uid) {
+        const cacheKey = 'qa_dossier_' + (uid || email || 'guest');
         try {
           const res = await fetch(`/api/student/portal-data?email=${encodeURIComponent(email || '')}&uid=${encodeURIComponent(uid || '')}`);
           const data = await res.json();
 
           if (!data || !data.success) return;
 
-          // 1. Batch details
-          if (data.batch) {
-            const bTitle = document.getElementById('studentBatchTitle');
-            const bBadge = document.getElementById('studentBatchBadge');
-            const bTiming = document.getElementById('studentBatchTiming');
-            const bTutor = document.getElementById('studentBatchTutor');
-            const bStatus = document.getElementById('studentBatchStatus');
-            const feeBatch = document.getElementById('studentFeeBatch');
+          // Save to local cache so next time it renders in 0ms
+          try {
+            localStorage.setItem(cacheKey, JSON.stringify(data));
+          } catch (e) {}
 
-            if (bTitle) bTitle.textContent = data.batch.batch_name;
-            if (bBadge) bBadge.textContent = data.batch.batch_name;
-            if (bTiming) bTiming.textContent = data.batch.timing || 'Mon, Wed, Fri • 4:00 PM – 5:30 PM';
-            if (bTutor) bTutor.textContent = data.batch.tutor_name || 'Rakesh Paul (M.Sc Physics)';
-            if (bStatus) bStatus.textContent = (data.batch.status || 'Active').toUpperCase();
-            if (feeBatch) feeBatch.textContent = data.batch.batch_name;
-          }
-
-          // 2. Attendance
-          const attPct = data.attendanceRate || 0;
-          const ring = document.getElementById('studentAttRing');
-          const attPctElem = document.getElementById('studentAttPct');
-          const attTotalElem = document.getElementById('studentAttTotal');
-          const attPresentElem = document.getElementById('studentAttPresent');
-          const attAbsentElem = document.getElementById('studentAttAbsent');
-          const attTbody = document.getElementById('studentAttendanceTableBody');
-
-          if (attPctElem) attPctElem.textContent = `${attPct}%`;
-          if (ring) {
-            ring.style.background = `conic-gradient(var(--success) ${attPct}%, var(--line) 0)`;
-          }
-          if (attTotalElem) attTotalElem.textContent = data.totalClasses || 0;
-          if (attPresentElem) attPresentElem.textContent = data.presentCount || 0;
-          if (attAbsentElem) attAbsentElem.textContent = data.absentCount || 0;
-
-          if (attTbody && data.attendance) {
-            if (data.attendance.length === 0) {
-              attTbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--muted); padding: 24px;">No class attendance recorded yet.</td></tr>';
-            } else {
-              attTbody.innerHTML = data.attendance.map((att) => {
-                const dateStr = att.date ? new Date(att.date).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' }) : '-';
-                const statusClass = (att.status || 'Present').toLowerCase();
-                return `
-                  <tr>
-                    <td><strong>${dateStr}</strong></td>
-                    <td>${att.batch_name || 'Science & Math'}</td>
-                    <td><span class="status-badge ${statusClass}">${att.status || 'Present'}</span></td>
-                    <td>${att.topic_covered || 'Core concepts'}</td>
-                    <td style="color: var(--muted); font-size: 0.82rem;">${att.remarks || 'Regular classwork completed'}</td>
-                  </tr>
-                `;
-              }).join('');
-            }
-          }
-
-          // 3. Performance / Test Marks
-          const avgScoreElem = document.getElementById('studentAvgScore');
-          const highScoreElem = document.getElementById('studentHighScore');
-          const testCountElem = document.getElementById('studentTestCount');
-          const perfGrid = document.getElementById('studentPerformanceGrid');
-
-          if (avgScoreElem) avgScoreElem.textContent = `${data.avgScore || 0}%`;
-          if (highScoreElem) highScoreElem.textContent = `${data.highestScore || 0}%`;
-          if (testCountElem) testCountElem.textContent = `${(data.performances && data.performances.length) || 0} Tests`;
-
-          if (perfGrid && data.performances) {
-            if (data.performances.length === 0) {
-              perfGrid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 28px; color: var(--muted);">No assessment records yet. Tests conducted will appear here.</div>';
-            } else {
-              perfGrid.innerHTML = data.performances.map((perf) => {
-                const pct = perf.percentage || (perf.max_marks ? Math.round((perf.marks_obtained / perf.max_marks) * 100) : 0);
-                const testDate = perf.date ? new Date(perf.date).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' }) : '';
-                return `
-                  <div class="performance-card">
-                    <div class="perf-head">
-                      <div>
-                        <h4 style="margin: 0; font-size: 0.98rem; color: var(--dark-green);">${perf.test_name}</h4>
-                        <span style="font-size: 0.78rem; color: var(--muted);">${perf.subject} • ${testDate}</span>
-                      </div>
-                      <span class="badge-grade">${perf.grade || 'A'}</span>
-                    </div>
-                    <div class="perf-score-row">
-                      <span class="score">${perf.marks_obtained} <span style="font-size: 0.85rem; color: var(--muted); font-weight: normal;">/ ${perf.max_marks}</span></span>
-                      <span class="pct">${pct}%</span>
-                    </div>
-                    <div class="perf-bar-wrap">
-                      <div class="perf-bar-fill" style="width: ${Math.min(100, pct)}%;"></div>
-                    </div>
-                    <p class="perf-feedback">"${perf.remarks || 'Strong performance. Keep practicing numerical questions.'}"</p>
-                  </div>
-                `;
-              }).join('');
-            }
-          }
-
-          // 4. Activities & Homework
-          const actList = document.getElementById('studentActivitiesList');
-          if (actList && data.activities) {
-            if (data.activities.length === 0) {
-              actList.innerHTML = '<div style="text-align: center; padding: 24px; color: var(--muted);">No active tasks or homework right now.</div>';
-            } else {
-              actList.innerHTML = data.activities.map((act) => {
-                const dueDate = act.due_date ? `Due: ${new Date(act.due_date).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' })}` : '';
-                return `
-                  <div class="activity-item">
-                    <div class="act-type ${act.type}">${(act.type || 'TASK').toUpperCase()}</div>
-                    <div class="act-content">
-                      <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 6px;">
-                        <h4 style="margin: 0; color: var(--dark-green); font-size: 0.95rem;">${act.title}</h4>
-                        <span class="act-date">${dueDate}</span>
-                      </div>
-                      <p style="margin: 4px 0 0; font-size: 0.84rem; color: var(--text); line-height: 1.4;">${act.description || ''}</p>
-                    </div>
-                  </div>
-                `;
-              }).join('');
-            }
-          }
+          renderStudentPortalDossier(data);
         } catch (err) {
           console.warn('Could not load student portal data:', err);
         }
       }
 
-      async function openAccountModal(user) {
+      function openAccountModal(user) {
         if (authModal) {
           authModal.classList.remove('open');
           authModal.setAttribute('aria-hidden', 'true');
         }
         if (!accountModal) return;
-        
+
+        // Open modal IMMEDIATELY with zero delay
+        accountModal.classList.add('open');
+        accountModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+
         const accDisplayName = document.getElementById('accDisplayName');
         const accRole = document.getElementById('accRole');
         const accEmail = document.getElementById('accEmail');
@@ -5028,14 +5390,25 @@
         const accProvider = document.getElementById('accProvider');
         const studentPortalName = document.getElementById('studentPortalName');
 
-        const displayName = user.displayName || 'Student';
+        // Check user profile cache
+        const profileCacheKey = 'qa_user_profile_' + user.uid;
+        let cachedProfile = null;
+        try {
+          const raw = localStorage.getItem(profileCacheKey);
+          if (raw) cachedProfile = JSON.parse(raw);
+        } catch (e) {}
+
+        const displayName = (cachedProfile && cachedProfile.name) || user.displayName || 'Student';
+        const role = (cachedProfile && cachedProfile.role) || 'Student';
+        const phone = (cachedProfile && cachedProfile.phone) || user.phoneNumber || 'Not registered';
+
         if (studentPortalName) studentPortalName.textContent = displayName;
         if (accDisplayName) accDisplayName.textContent = displayName;
         if (accEmail) accEmail.textContent = user.email || 'None';
-        if (accPhone) accPhone.textContent = user.phoneNumber || 'Fetching...';
-        if (accRole) accRole.textContent = 'Student';
+        if (accPhone) accPhone.textContent = phone;
+        if (accRole) accRole.textContent = role;
 
-        const providerId = user.providerData && user.providerData[0] ? user.providerData[0].providerId : 'firebase';
+        const providerId = user.providerData && user.providerData[0] ? user.providerData[0].providerId : 'email';
         if (accProvider) {
           if (providerId === 'google.com') {
             accProvider.textContent = 'Google Sign-In';
@@ -5046,29 +5419,51 @@
           }
         }
 
-        // Fetch latest saved phone & role from Firestore
+        // Render cached student dossier immediately (0ms instant display)
+        const cacheKey = 'qa_dossier_' + (user.uid || user.email);
+        try {
+          const cachedDossier = localStorage.getItem(cacheKey);
+          if (cachedDossier) {
+            renderStudentPortalDossier(JSON.parse(cachedDossier));
+          }
+        } catch (e) {}
+
+        // Asynchronously fetch latest profile from Firestore in background (non-blocking)
         if (db) {
-          try {
-            const doc = await db.collection('users').doc(user.uid).get();
+          db.collection('users').doc(user.uid).get().then((doc) => {
             if (doc.exists) {
               const data = doc.data();
               if (data.phone && accPhone) accPhone.textContent = data.phone;
               if (data.role && accRole) accRole.textContent = data.role;
               if (data.name && accDisplayName) accDisplayName.textContent = data.name;
               if (data.name && studentPortalName) studentPortalName.textContent = data.name;
-            } else if (!user.phoneNumber && accPhone) {
-              accPhone.textContent = 'Not registered';
+              try {
+                localStorage.setItem(profileCacheKey, JSON.stringify(data));
+              } catch (e) {}
             }
-          } catch (e) {
+          }).catch((e) => {
             console.warn('Profile fetch error:', e);
-          }
+          });
         }
 
-        // Fetch academic dossier data (batch, attendance, performance, activities)
+        // Asynchronously fetch latest academic dossier in background (non-blocking)
         loadStudentPortalData(user.email, user.uid);
+      }
 
-        accountModal.classList.add('open');
-        accountModal.setAttribute('aria-hidden', 'false');
+      // Hook up Monthly Tuition Fee Pay Button via Razorpay in student portal
+      const portalPayFeeBtn = document.getElementById('portalPayFeeBtn');
+      if (portalPayFeeBtn) {
+        portalPayFeeBtn.addEventListener('click', () => {
+          closeAccountModal();
+          const batchName = document.getElementById('studentFeeBatch')?.textContent?.trim() || 'Class 9–10';
+          let targetBatch = 'Class 9–10';
+          if (batchName.includes('6') || batchName.includes('7') || batchName.includes('8')) {
+            targetBatch = 'Class 6–8';
+          } else if (batchName.includes('11') || batchName.includes('12')) {
+            targetBatch = 'Class 11–12';
+          }
+          openCheckout(targetBatch);
+        });
       }
 
       if (navStudentPortalBtn) {
@@ -5147,6 +5542,13 @@
         document.getElementById('adminTabActivities').classList.toggle('active', tabName === 'activities');
         document.getElementById('adminTabBookings').classList.toggle('active', tabName === 'bookings');
         document.getElementById('adminTabPayments').classList.toggle('active', tabName === 'payments');
+        const enqTab = document.getElementById('adminTabEnquiries');
+        if (enqTab) {
+          enqTab.classList.toggle('active', tabName === 'enquiries');
+          if (tabName === 'enquiries') {
+            loadAdminEnquiries();
+          }
+        }
       };
 
       const adminTabButtons = document.querySelectorAll('#adminTabs .portal-tab');
@@ -5162,6 +5564,9 @@
       let cachedAdminAttendance = [];
       let cachedAdminPerformances = [];
       let cachedAdminActivities = [];
+      let cachedAdminBookings = [];
+      let cachedAdminPayments = [];
+      let cachedAdminEnquiries = [];
       let pendingAdminConfirmCb = null;
 
       // Submodal Handlers
@@ -5236,6 +5641,23 @@
             document.getElementById('adminStatTests').textContent = stats.tests || 0;
             document.getElementById('adminStatBookings').textContent = stats.bookings || 0;
             document.getElementById('adminStatPayments').textContent = stats.payments || 0;
+            
+            const enqStatEl = document.getElementById('adminStatEnquiries');
+            if (enqStatEl) enqStatEl.textContent = stats.enquiries || 0;
+
+            const enqQuickEl = document.getElementById('adminQuickEnquiryCount');
+            if (enqQuickEl) enqQuickEl.textContent = stats.enquiries || 0;
+
+            const enqBadge = document.getElementById('adminEnquiriesTabBadge');
+            if (enqBadge) {
+              const pendingCount = stats.pendingEnquiries !== undefined ? stats.pendingEnquiries : 0;
+              if (pendingCount > 0) {
+                enqBadge.textContent = pendingCount;
+                enqBadge.style.display = 'inline-block';
+              } else {
+                enqBadge.style.display = 'none';
+              }
+            }
           }
         } catch (e) {
           console.warn('Admin overview fetch error:', e);
@@ -6278,6 +6700,350 @@
         });
       };
 
+      // ==========================================
+      // TAB 8: SERVICE ENQUIRIES MANAGEMENT
+      // ==========================================
+      let enquiryFormVisible = true;
+      window.toggleAdminEnquiryForm = function() {
+        const container = document.getElementById('adminEnquiryFormContainer');
+        const btn = document.getElementById('toggleEnquiryFormBtn');
+        if (!container) return;
+        enquiryFormVisible = !enquiryFormVisible;
+        container.style.display = enquiryFormVisible ? 'block' : 'none';
+        if (btn) btn.textContent = enquiryFormVisible ? 'Hide Form' : 'Show Form';
+      };
+
+      async function loadAdminEnquiries() {
+        try {
+          const res = await fetch('/api/admin/enquiries');
+          const data = await res.json();
+          if (data && data.success) {
+            cachedAdminEnquiries = data.records || [];
+
+            // Update stats
+            const total = cachedAdminEnquiries.length;
+            const pending = cachedAdminEnquiries.filter((e) => (e.status || '').toLowerCase() === 'pending').length;
+            const contacted = cachedAdminEnquiries.filter((e) => (e.status || '').toLowerCase() === 'contacted').length;
+            const resolved = cachedAdminEnquiries.filter((e) => ['resolved', 'enrolled', 'admitted'].includes((e.status || '').toLowerCase())).length;
+
+            const statTotal = document.getElementById('enqStatTotal');
+            const statPending = document.getElementById('enqStatPending');
+            const statContacted = document.getElementById('enqStatContacted');
+            const statResolved = document.getElementById('enqStatResolved');
+
+            if (statTotal) statTotal.textContent = total;
+            if (statPending) statPending.textContent = pending;
+            if (statContacted) statContacted.textContent = contacted;
+            if (statResolved) statResolved.textContent = resolved;
+
+            const enqBadge = document.getElementById('adminEnquiriesTabBadge');
+            if (enqBadge) {
+              if (pending > 0) {
+                enqBadge.textContent = pending;
+                enqBadge.style.display = 'inline-block';
+              } else {
+                enqBadge.style.display = 'none';
+              }
+            }
+
+            const enqStatEl = document.getElementById('adminStatEnquiries');
+            if (enqStatEl) enqStatEl.textContent = total;
+
+            const enqQuickEl = document.getElementById('adminQuickEnquiryCount');
+            if (enqQuickEl) enqQuickEl.textContent = total;
+
+            renderAdminEnquiriesTable();
+          }
+        } catch (e) {
+          console.warn('Admin enquiries fetch error:', e);
+          const tbody = document.getElementById('adminEnquiriesTableBody');
+          if (tbody) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #dc2626; padding: 24px;">Failed to load enquiries. Please check connection.</td></tr>';
+          }
+        }
+      }
+
+      function renderAdminEnquiriesTable() {
+        const tbody = document.getElementById('adminEnquiriesTableBody');
+        if (!tbody) return;
+
+        const searchInput = document.getElementById('adminEnquirySearchInput');
+        const statusFilter = document.getElementById('adminEnquiryStatusFilter');
+
+        const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+        const filter = statusFilter ? statusFilter.value : 'ALL';
+
+        let list = [...cachedAdminEnquiries];
+
+        if (filter !== 'ALL') {
+          list = list.filter((e) => (e.status || '').toLowerCase() === filter.toLowerCase());
+        }
+
+        if (query) {
+          list = list.filter((e) => {
+            const name = (e.name || '').toLowerCase();
+            const phone = (e.phone || '').toLowerCase();
+            const area = (e.area || '').toLowerCase();
+            const details = (e.details || '').toLowerCase();
+            return name.includes(query) || phone.includes(query) || area.includes(query) || details.includes(query);
+          });
+        }
+
+        if (list.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="7" style="text-align: center; color: var(--muted); padding: 28px;">
+                ${cachedAdminEnquiries.length === 0 ? 'No service enquiries logged yet. Use the form above to record an enquiry.' : 'No enquiries match the current search or status filter.'}
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        tbody.innerHTML = list.map((e) => {
+          const rawDate = e.date_received || e.created_at;
+          let dateStr = 'Just now';
+          if (rawDate) {
+            const d = new Date(rawDate);
+            if (!isNaN(d.getTime())) {
+              dateStr = d.toLocaleDateString('en-IN', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+              }) + ', ' + d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+            }
+          }
+
+          const rawStatus = e.status || 'Pending';
+          const statusLower = rawStatus.toLowerCase();
+
+          // Prepare phone links (call + whatsapp)
+          const cleanPhone = (e.phone || '').replace(/[^0-9+]/g, '');
+          let waPhone = cleanPhone.replace(/^\+/, '');
+          if (waPhone.length === 10) waPhone = '91' + waPhone;
+
+          const escName = (e.name || '').replace(/'/g, "\\'");
+          const detailsEscaped = (e.details || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+          return `
+            <tr>
+              <td style="font-size: 0.82rem; color: var(--muted); white-space: nowrap;">
+                <strong>${dateStr}</strong>
+              </td>
+              <td>
+                <div style="font-weight: 700; color: var(--dark-green);">${e.name || 'Unknown'}</div>
+              </td>
+              <td>
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                  <span style="font-size: 0.86rem; font-weight: 600;">${e.phone || '-'}</span>
+                  <div style="display: flex; gap: 4px;">
+                    ${cleanPhone ? `
+                      <a href="tel:${cleanPhone}" class="btn ghost small" style="padding: 2px 7px; font-size: 0.72rem; text-decoration: none;" title="Call">📞 Call</a>
+                      <a href="https://wa.me/${waPhone}?text=${encodeURIComponent('Hello ' + (e.name || 'Student/Parent') + ', this is Quantum Academy Agartala regarding your tuition enquiry.')}" target="_blank" rel="noopener" class="btn small" style="padding: 2px 7px; font-size: 0.72rem; background: #25D366; border-color: #25D366; color: #fff; text-decoration: none;" title="WhatsApp">💬 WA</a>
+                    ` : ''}
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span style="display: inline-flex; align-items: center; gap: 4px; font-weight: 600; font-size: 0.85rem; color: #1e3a2b;">
+                  <span>📍</span> ${e.area || 'Agartala'}
+                </span>
+              </td>
+              <td style="max-width: 280px;">
+                <div style="font-size: 0.84rem; line-height: 1.4; color: #2c3e35; max-height: 80px; overflow-y: auto;">
+                  ${detailsEscaped}
+                </div>
+              </td>
+              <td>
+                <span class="status-badge ${statusLower}">${rawStatus}</span>
+              </td>
+              <td>
+                <div style="display: flex; gap: 4px; align-items: center; flex-wrap: wrap;">
+                  ${statusLower === 'pending' ? `
+                    <button type="button" class="btn small" style="padding: 4px 8px; font-size: 0.74rem; background: #2563eb; border-color: #2563eb; color: #fff;" onclick="updateEnquiryStatus('${e.id}', 'Contacted')" title="Mark as Contacted">Contacted</button>
+                  ` : ''}
+                  ${statusLower === 'contacted' ? `
+                    <button type="button" class="btn small" style="padding: 4px 8px; font-size: 0.74rem; background: var(--success); border-color: var(--success); color: #fff;" onclick="updateEnquiryStatus('${e.id}', 'Resolved')" title="Mark as Resolved / Enrolled">Resolve</button>
+                  ` : ''}
+                  <button type="button" class="btn ghost small" style="padding: 3px 7px; font-size: 0.74rem;" onclick="openEditEnquiryModal('${e.id}')" title="Edit Enquiry">✏️</button>
+                  <button type="button" class="btn small" style="padding: 3px 6px; font-size: 0.72rem; background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5;" onclick="confirmDeleteEnquiry('${e.id}', '${escName}')" title="Delete Enquiry">✕</button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      // Live search and filter event listeners for enquiries
+      const enqSearchInput = document.getElementById('adminEnquirySearchInput');
+      if (enqSearchInput) {
+        enqSearchInput.addEventListener('input', renderAdminEnquiriesTable);
+      }
+      const enqStatusFilter = document.getElementById('adminEnquiryStatusFilter');
+      if (enqStatusFilter) {
+        enqStatusFilter.addEventListener('change', renderAdminEnquiriesTable);
+      }
+
+      // Quick Update Enquiry Status
+      window.updateEnquiryStatus = async function(id, status) {
+        try {
+          const res = await fetch(`/api/admin/enquiries/${id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status })
+          });
+          const d = await res.json();
+          if (d.success) {
+            showToast(`Enquiry marked as ${status}.`);
+            loadAdminEnquiries();
+            loadAdminOverview();
+          } else {
+            showToast(d.error || 'Failed to update enquiry status.');
+          }
+        } catch (err) {
+          showToast('Failed to update enquiry status.');
+        }
+      };
+
+      // Open Edit Enquiry Modal
+      window.openEditEnquiryModal = function(id) {
+        const enq = cachedAdminEnquiries.find((item) => String(item.id) === String(id));
+        if (!enq) return;
+
+        document.getElementById('editEnqId').value = enq.id;
+        document.getElementById('editEnqName').value = enq.name || '';
+        document.getElementById('editEnqPhone').value = enq.phone || '';
+        document.getElementById('editEnqArea').value = enq.area || '';
+        document.getElementById('editEnqDetails').value = enq.details || '';
+
+        const statusSel = document.getElementById('editEnqStatus');
+        if (statusSel) {
+          statusSel.value = enq.status || 'Pending';
+        }
+
+        openAdminSubmodal('enquiryEditSubmodal');
+      };
+
+      // Handle New Enquiry Form submission
+      const adminNewEnquiryForm = document.getElementById('adminNewEnquiryForm');
+      if (adminNewEnquiryForm) {
+        adminNewEnquiryForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const name = document.getElementById('adminNewEnqName').value.trim();
+          const phone = document.getElementById('adminNewEnqPhone').value.trim();
+          const area = document.getElementById('adminNewEnqArea').value.trim();
+          const status = document.getElementById('adminNewEnqStatus').value;
+          const details = document.getElementById('adminNewEnqDetails').value.trim();
+          const btn = document.getElementById('adminNewEnqSubmitBtn');
+
+          if (!name || !phone || !area || !details) {
+            showToast('Please fill in all required enquiry fields.');
+            return;
+          }
+
+          btn.disabled = true;
+          btn.textContent = 'Saving...';
+
+          const enquiryPayload = { name, phone, area, details, status };
+
+          try {
+            // Save to Cloud SQL
+            const res = await fetch('/api/admin/enquiries', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(enquiryPayload)
+            });
+            const d = await res.json();
+
+            // Dual write to Firestore enquiries
+            if (db) {
+              try {
+                await db.collection('enquiries').add({
+                  ...enquiryPayload,
+                  createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+              } catch (fsErr) {
+                console.warn('Firestore enquiry dual-sync error:', fsErr);
+              }
+            }
+
+            if (d.success) {
+              showToast('New enquiry saved successfully!');
+              adminNewEnquiryForm.reset();
+              loadAdminEnquiries();
+              loadAdminOverview();
+            } else {
+              showToast(d.error || 'Failed to save enquiry.');
+            }
+          } catch (err) {
+            showToast('Error saving enquiry.');
+          } finally {
+            btn.disabled = false;
+            btn.textContent = 'Save Enquiry';
+          }
+        });
+      }
+
+      // Handle Edit Enquiry Form submission
+      const adminEnquiryEditForm = document.getElementById('adminEnquiryEditForm');
+      if (adminEnquiryEditForm) {
+        adminEnquiryEditForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const id = document.getElementById('editEnqId').value;
+          const name = document.getElementById('editEnqName').value.trim();
+          const phone = document.getElementById('editEnqPhone').value.trim();
+          const area = document.getElementById('editEnqArea').value.trim();
+          const status = document.getElementById('editEnqStatus').value;
+          const details = document.getElementById('editEnqDetails').value.trim();
+          const btn = document.getElementById('enquiryEditSubmitBtn');
+
+          btn.disabled = true;
+          btn.textContent = 'Saving...';
+
+          try {
+            const res = await fetch(`/api/admin/enquiries/${id}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name, phone, area, status, details })
+            });
+            const d = await res.json();
+
+            if (d.success) {
+              showToast('Enquiry details updated successfully!');
+              closeAdminSubmodal('enquiryEditSubmodal');
+              loadAdminEnquiries();
+              loadAdminOverview();
+            } else {
+              showToast(d.error || 'Failed to update enquiry.');
+            }
+          } catch (err) {
+            showToast('Error updating enquiry.');
+          } finally {
+            btn.disabled = false;
+            btn.textContent = 'Save Changes';
+          }
+        });
+      }
+
+      // Confirm Delete Enquiry
+      window.confirmDeleteEnquiry = function(id, name) {
+        showAdminConfirm('Delete Enquiry', `Permanently delete enquiry record for ${name}?`, async () => {
+          try {
+            const res = await fetch(`/api/admin/enquiries/${id}`, { method: 'DELETE' });
+            const d = await res.json();
+            if (d.success) {
+              showToast('Enquiry record deleted.');
+              loadAdminEnquiries();
+              loadAdminOverview();
+            } else {
+              showToast(d.error || 'Failed to delete enquiry.');
+            }
+          } catch (err) {
+            showToast('Error deleting enquiry.');
+          }
+        });
+      };
+
       function loadAdminAllData() {
         loadAdminOverview();
         loadAdminStudents();
@@ -6286,6 +7052,7 @@
         loadAdminActivities();
         loadAdminBookings();
         loadAdminPayments();
+        loadAdminEnquiries();
       }
 
       // Auth state listener
